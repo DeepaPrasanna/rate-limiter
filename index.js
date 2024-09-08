@@ -1,12 +1,16 @@
 import express from "express";
 
 import TokenBucket from "./token-bucket.js";
+import FixedWindowCounter from "./fixed-window-counter.js";
+import SlidingWindowLog from "./sliding-window-log.js";
 
 const app = express();
 const port = 3000;
 
 // token bucket with capacity 4 and adding 4 tokens every 2 sec
-const bucket = new TokenBucket(10, 1, 1);
+// const bucket = new TokenBucket(10, 1, 1);
+// const fixedWindowCounter = new FixedWindowCounter(60, 160);
+const slidingWindowLog = new SlidingWindowLog(60, 5);
 
 app.get("/", (req, res) => {
   res.send("Health check OKK!");
@@ -15,7 +19,9 @@ app.get("/", (req, res) => {
 app.get("/limited", (req, res) => {
   const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   console.log({ ipAddress });
-  const result = bucket.handleRequest(ipAddress);
+  // const result = bucket.handleRequest(ipAddress);
+  const result = slidingWindowLog.handleRequest();
+  // const result = fixedWindowCounter.handleRequest();
 
   if (!result) {
     res.status(429);
@@ -30,10 +36,8 @@ app.get("/unlimited", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Rate limiter listening on port ${port}`);
 });
-
-
 
 // capacity, refillAmount, refillTime (sec)
 // token bucket with 2 token every 1 min
