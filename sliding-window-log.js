@@ -12,7 +12,7 @@ export default class SlidingWindowLog {
       (timestamp) => currentTime - timestamp <= this.windowSize
     );
 
-    if (this.requestLogs.length > this.maxRequests) return false;
+    if (this.requestLogs.length >= this.maxRequests) return false;
 
     this.requestLogs.push(Date.now());
     return true;

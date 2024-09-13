@@ -1,10 +1,10 @@
 export default class TokenBucket {
   constructor(capacity, refillAmount, refillTimeInSeconds) {
-    (this.capacity = capacity),
-      (this.refillAmount =
-        refillAmount) /* Amount of tokens refilled in the bucket */,
-      (this.refillTimeInSeconds =
-        refillTimeInSeconds); /* In what time period, the bucket is refilled*/
+    this.capacity = capacity;
+    this.refillAmount =
+      refillAmount; /* Amount of tokens refilled in the bucket */
+    this.refillTimeInSeconds =
+      refillTimeInSeconds; /* In what time period, the bucket is refilled*/
 
     this.db = {};
   }
